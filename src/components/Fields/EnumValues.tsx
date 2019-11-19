@@ -4,6 +4,8 @@ import { ExampleValue, FieldLabel } from '../../common-elements/fields';
 import { l } from '../../services/Labels';
 import { OptionsContext } from '../OptionsProvider';
 
+const maxEnumValues = 32;
+
 export interface EnumValuesProps {
   values: string[];
   type: string;
@@ -18,13 +20,21 @@ export class EnumValues extends React.PureComponent<EnumValuesProps> {
       return null;
     }
 
+    let filteredValues = values;
+    let post;
+
+    if (filteredValues.length > maxEnumValues) {
+      filteredValues = filteredValues.slice(0, maxEnumValues);
+      post = '... (too many values to display)';
+    }
+
     return (
       <div>
         <FieldLabel>
           {type === 'array' ? l('enumArray') : ''}{' '}
-          {values.length === 1 ? l('enumSingleValue') : l('enum')}:
+          {filteredValues.length === 1 ? l('enumSingleValue') : l('enum')}:
         </FieldLabel>{' '}
-        {values.map((value, idx) => {
+        {filteredValues.map((value, idx) => {
           const exampleValue = enumSkipQuotes ? value : JSON.stringify(value);
           return (
             <React.Fragment key={idx}>
@@ -32,6 +42,7 @@ export class EnumValues extends React.PureComponent<EnumValuesProps> {
             </React.Fragment>
           );
         })}
+        {post}
       </div>
     );
   }
