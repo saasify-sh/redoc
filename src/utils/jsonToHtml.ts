@@ -1,6 +1,18 @@
 let level = 1;
 
 export function jsonToHTML(json, maxExpandLevel) {
+  if (maxExpandLevel > 1) {
+    const numLines = JSON.stringify(json, null, 2).split('\n').length;
+
+    if (numLines >= 128) {
+      maxExpandLevel = 1;
+    } else if (numLines >= 64) {
+      maxExpandLevel = 2;
+    } else if (numLines >= 32) {
+      maxExpandLevel = Math.min(maxExpandLevel, 3);
+    }
+  }
+
   level = 1;
   let output = '';
   output += '<div class="redoc-json">';
