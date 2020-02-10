@@ -27,7 +27,7 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
   static contextType = OptionsContext;
   render() {
     const { showExamples, field, renderDiscriminatorSwitch } = this.props;
-    const { enumSkipQuotes } = this.context;
+    const { enumSkipQuotes, hideSchemaTitles } = this.context;
 
     const { schema, description, example, deprecated } = field;
 
@@ -38,7 +38,8 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
     if (showExamples && example !== undefined) {
       const label = l('example') + ':';
       if (field.in && (field.style || field.serializationMime)) {
-        const serializedValue = serializeParameterValue(field, example);
+        // decode for better readability in examples: see https://github.com/Redocly/redoc/issues/1138
+        const serializedValue = decodeURIComponent(serializeParameterValue(field, example));
         exampleField = <FieldDetail label={label} value={serializedValue} raw={true} />;
       } else {
         exampleField = <FieldDetail label={label} value={example} />;
@@ -58,7 +59,7 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
               &gt;{' '}
             </TypeFormat>
           )}
-          {schema.title && <TypeTitle> ({schema.title}) </TypeTitle>}
+          {schema.title && !hideSchemaTitles && <TypeTitle> ({schema.title}) </TypeTitle>}
           <ConstraintsView constraints={schema.constraints} />
           {schema.nullable && <NullableLabel> {l('nullable')} </NullableLabel>}
           {schema.pattern && <PatternLabel> {schema.pattern} </PatternLabel>}

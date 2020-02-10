@@ -24,6 +24,8 @@ export interface RedocRawOptions {
   hideSingleRequestSampleTab?: boolean | string;
   menuToggle?: boolean | string;
   jsonSampleExpandLevel?: number | string | 'all';
+  hideSchemaTitles?: boolean | string;
+  payloadSampleIdx?: number;
 
   unstable_ignoreMimeParameters?: boolean;
 
@@ -36,12 +38,12 @@ export interface RedocRawOptions {
   expandDefaultServerVariables?: boolean;
 }
 
-function argValueToBoolean(val?: string | boolean): boolean {
+function argValueToBoolean(val?: string | boolean, defaultValue?: boolean): boolean {
   if (val === undefined) {
-    return false;
+    return defaultValue || false;
   }
   if (typeof val === 'string') {
-    return true;
+    return val === 'false' ? false : true;
   }
   return val;
 }
@@ -116,6 +118,18 @@ export class RedocNormalizedOptions {
     return value;
   }
 
+  static normalizePayloadSampleIdx(value: RedocRawOptions['payloadSampleIdx']): number {
+    if (typeof value === 'number') {
+      return Math.max(0, value); // always greater or equal than 0
+    }
+
+    if (typeof value === 'string') {
+      return isFinite(value) ? parseInt(value, 10) : 0;
+    }
+
+    return 0;
+  }
+
   private static normalizeJsonSampleExpandLevel(level?: number | string | 'all'): number {
     if (level === 'all') {
       return +Infinity;
@@ -144,6 +158,8 @@ export class RedocNormalizedOptions {
   menuToggle: boolean;
   jsonSampleExpandLevel: number;
   enumSkipQuotes: boolean;
+  hideSchemaTitles: boolean;
+  payloadSampleIdx: number;
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
@@ -177,11 +193,13 @@ export class RedocNormalizedOptions {
     this.onlyRequiredInSamples = argValueToBoolean(raw.onlyRequiredInSamples);
     this.showExtensions = RedocNormalizedOptions.normalizeShowExtensions(raw.showExtensions);
     this.hideSingleRequestSampleTab = argValueToBoolean(raw.hideSingleRequestSampleTab);
-    this.menuToggle = argValueToBoolean(raw.menuToggle);
+    this.menuToggle = argValueToBoolean(raw.menuToggle, true);
     this.jsonSampleExpandLevel = RedocNormalizedOptions.normalizeJsonSampleExpandLevel(
       raw.jsonSampleExpandLevel,
     );
     this.enumSkipQuotes = argValueToBoolean(raw.enumSkipQuotes);
+    this.hideSchemaTitles = argValueToBoolean(raw.hideSchemaTitles);
+    this.payloadSampleIdx = RedocNormalizedOptions.normalizePayloadSampleIdx(raw.payloadSampleIdx);
 
     this.unstable_ignoreMimeParameters = argValueToBoolean(raw.unstable_ignoreMimeParameters);
 
