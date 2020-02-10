@@ -51,12 +51,15 @@ export class FieldModel {
     infoOrRef: Referenced<OpenAPIParameter> & { name?: string; kind?: string },
     pointer: string,
     options: RedocNormalizedOptions,
+    expanded: boolean = false,
   ) {
     const info = parser.deref<OpenAPIParameter>(infoOrRef);
     this.kind = infoOrRef.kind || 'field';
     this.name = infoOrRef.name || info.name;
     this.in = info.in;
     this.required = !!info.required;
+
+    this.expanded = expanded;
 
     let fieldSchema = info.schema;
     let serializationMime = '';

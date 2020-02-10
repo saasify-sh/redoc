@@ -8,7 +8,7 @@ import { StyledDropdown } from '../../common-elements';
 
 export const MimeLabel = styled.div`
   padding: 12px;
-  background-color: ${({ theme }) => transparentize(0.6, theme.rightPanel.backgroundColor)};
+  background-color: ${({ theme }) => transparentize(0.6, theme.colors.background.main)};
   margin: 0 0 10px 0;
   display: block;
 `;
@@ -21,7 +21,7 @@ export const DropdownLabel = styled.span`
   top: -11px;
   left: 12px;
   font-weight: ${({ theme }) => theme.typography.fontWeightBold};
-  color: ${({ theme }) => transparentize(0.6, theme.rightPanel.textColor)};
+  color: ${({ theme }) => transparentize(0.4, theme.rightPanel.textColor)};
 `;
 
 export const DropdownWrapper = styled.div`
@@ -31,10 +31,9 @@ export const DropdownWrapper = styled.div`
 export const InvertedSimpleDropdown = styled(StyledDropdown)`
   margin-left: 10px;
   text-transform: none;
-  font-size: 0.929em;
   margin: 0 0 10px 0;
   display: block;
-  background-color: ${({ theme }) => transparentize(0.6, theme.rightPanel.backgroundColor)};
+  background-color: ${({ theme }) => transparentize(0.6, theme.colors.background.main)};
   .Dropdown-control {
     margin-top: 0;
   }

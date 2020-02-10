@@ -18,10 +18,10 @@ export const StyledDropdown = styled(Dropdown)`
   display: inline-block;
   position: relative;
   width: auto;
-  font-family: ${props => props.theme.typography.headings.fontFamily};
+  font-family: ${props => props.theme.typography.fontFamily};
 
   .Dropdown-control {
-    font-family: ${props => props.theme.typography.headings.fontFamily};
+    font-family: ${props => props.theme.typography.fontFamily};
     position: relative;
     font-size: 0.929em;
     width: 100%;

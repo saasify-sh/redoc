@@ -45,6 +45,12 @@ const defaultTheme: ThemeInterface = {
       dark: 'rgba(0,0,0, 0.1)',
       light: '#ffffff',
     },
+    background: {
+      main: '#263238',
+      light: ({ colors }) => lighten(colors.tonalOffset, colors.background.main),
+      dark: ({ colors }) => darken(colors.tonalOffset, colors.background.main),
+      contrastText: ({ colors }) => readableColor(colors.background.main),
+    },
     responses: {
       success: {
         color: ({ colors }) => colors.success.main,
@@ -152,7 +158,7 @@ const defaultTheme: ThemeInterface = {
     textColor: '#ffffff',
   },
   codeSample: {
-    backgroundColor: ({ rightPanel }) => darken(0.1, rightPanel.backgroundColor),
+    backgroundColor: theme => darken(0.1, theme.colors.background.main),
   },
 };
 
@@ -229,6 +235,7 @@ export interface ResolvedThemeInterface {
     success: ColorSetting;
     warning: ColorSetting;
     error: ColorSetting;
+    background: ColorSetting;
     border: {
       light: string;
       dark: string;
